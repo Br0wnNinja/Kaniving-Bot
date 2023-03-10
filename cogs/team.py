@@ -13,7 +13,8 @@ class Teams(commands.Cog):
     async def create(self, ctx, team_name: str, *team_members: discord.Member):
         """Create a new team with the specified name and add the specified members"""
         # Create the role with the specified name
-        role = await ctx.guild.create_role(name=team_name)
+        role_name = team_name.replace(" ", "_")
+        role = await ctx.guild.create_role(name=role_name)
 
         # Add the specified members to the role
         for member in team_members:
@@ -28,7 +29,10 @@ class Teams(commands.Cog):
 
         # Send a confirmation message
         member_mentions = " ".join(member.mention for member in team_members)
-        await ctx.send(f"Created team {team_name} with members {member_mentions}")
+        confirmation_message = f"Created team {team_name} with members {member_mentions}. {ctx.author.mention} has been assigned as the team captain!"
+        await ctx.send(confirmation_message)
+
+
 
 
 
