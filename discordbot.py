@@ -17,7 +17,7 @@ client = commands.Bot(command_prefix="$", intents=discord.Intents.all())
 
 client.remove_command("help")
 
-bot_status = cycle(["$bothelp" , "Join the Tournament"])
+bot_status = cycle(["$bothelp" , "DM for Support"])
 
 
 @tasks.loop(seconds=2)
