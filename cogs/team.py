@@ -10,9 +10,8 @@ class Teams(commands.Cog):
         print("Team.py is ready!")
 
     @commands.command()
-    async def create(self, ctx, *team_name: str, team_members: commands.Greedy[discord.Member]):
+    async def create(self, ctx, team_name: str, *team_members: discord.Member):
         """Create a new team with the specified name and add the specified members"""
-        team_name = " ".join(team_name) # Combine all words into a single string
         # Create the role with the specified name
         role = await ctx.guild.create_role(name=team_name)
 
@@ -28,7 +27,9 @@ class Teams(commands.Cog):
         await ctx.author.add_roles(team_captain_role)
 
         # Send a confirmation message
-        await ctx.send(f"Created team {team_name} with members {', '.join(member.mention for member in team_members)}")
+        member_mentions = " ".join(member.mention for member in team_members)
+        await ctx.send(f"Created team {team_name} with members {member_mentions}")
+
 
 
 async def setup(client):
