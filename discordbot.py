@@ -138,7 +138,7 @@ async def on_message(message):
             await message.channel.send("What's the reason for the support ticket?")
             problem = await client.wait_for('message', timeout=3600.0, check=lambda m: m.author == message.author and isinstance(m.channel, discord.DMChannel))
             server = client.get_guild(980680618541207602)  # replace SERVER_ID with your server ID
-            category = discord.utils.get(server.categories, name="Support")  # replace "Support" with your desired category name
+            category = discord.utils.get(server.categories, name="Support Tickets")  # replace "Support Tickets" with your desired category name
             channel_name = problem.content.replace(" ", "-")[:90]  # use problem as channel name, max length 90 characters
             channel = await server.create_text_channel(name=channel_name, category=category, overwrites={
                 server.default_role: discord.PermissionOverwrite(read_messages=False),
