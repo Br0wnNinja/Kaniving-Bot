@@ -8,6 +8,7 @@ import json
 import tracemalloc
 import youtube_dl
 from config import TOKEN
+import csv
 
 voice_client = None
 
@@ -157,9 +158,6 @@ async def on_message(message):
         if message.author.id in user_asked_count:
             await message.channel.send("I'm sorry, you took too long to react.")
             user_asked_count[message.author.id] = 0  # reset user_asked_count for this user
-
-
-
 
 
 
