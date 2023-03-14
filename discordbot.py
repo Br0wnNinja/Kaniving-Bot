@@ -9,6 +9,8 @@ import tracemalloc
 import youtube_dl
 from config import TOKEN
 import csv
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 voice_client = None
 
@@ -19,6 +21,9 @@ client = commands.Bot(command_prefix="$", intents=discord.Intents.all())
 client.remove_command("help")
 
 bot_status = cycle(["$bothelp" , "DM for Support"])
+
+client_credentials_manager = SpotifyClientCredentials(client_id="Acb40bff23934ab2875d58b000d01f0d", client_secret="774b7ca4b0fb438da051ebbcd2a69d5a")
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 
 @tasks.loop(seconds=2)

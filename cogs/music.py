@@ -1,85 +1,107 @@
+import os
 import discord
-from discord.ext import commands
-import asyncio
 import youtube_dl
+import spotipy
+import spotipy.util as util
+from discord.ext import commands
+from spotipy.oauth2 import SpotifyClientCredentials
 
 class Music(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
+        self.is_playing = False
+        self.ctx = None
         self.voice = None
+        self.next_song = False
         self.song_queue = []
 
-        self.YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True'}
-        self.FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+        self.SPOTIPY_CLIENT_ID = "Acb40bff23934ab2875d58b000d01f0d"
+        self.SPOTIPY_CLIENT_SECRET = "774b7ca4b0fb438da051ebbcd2a69d5a"
+        self.SPOTIPY_REDIRECT_URI = "http://localhost:8888/callback"
+        self.SPOTIPY_USERNAME = "i6o94n1efrdog99b3lp09kve1"
+        self.SPOTIPY_SCOPE = "user-read-playback-state,user-modify-playback-state,user-read-currently-playing"
+
+        self.client_credentials_manager = SpotifyClientCredentials(
+            client_id=self.SPOTIPY_CLIENT_ID,
+            client_secret=self.SPOTIPY_CLIENT_SECRET
+        )
+        self.spotify = spotipy.Spotify(
+            client_credentials_manager=self.client_credentials_manager
+        )
 
     @commands.Cog.listener()
     async def on_ready(self):
         print("music.py is ready!")
-    
+        
+        
+    def play_song(self, song):
+        if song.startswith("https://open.spotify.com/track/"):
+            song_id = song.split("/")[-1]
+            track = self.spotify.track(song_id)
+            track_url = track["external_urls"]["spotify"]
+            title = track["name"]
+            artist = track["artists"][0]["name"]
+            thumbnail = track["album"]["images"][0]["url"]
+            duration = track["duration_ms"] // 1000
+        else:
+            with youtube_dl.YoutubeDL({}) as ydl:
+                info = ydl.extract_info(song, download=False)
+                title = info["title"]
+                thumbnail = info["thumbnail"]
+                duration = info["duration"]
+                artist = info["uploader"]
+                track_url = info["webpage_url"]
+
+        embed = discord.Embed(
+            title="Now Playing",
+            description=f"[{title}]({track_url})",
+            color=discord.Color.dark_red()
+        )
+        embed.set_thumbnail(url=thumbnail)
+        embed.add_field(name="Duration", value=self.format_duration(duration))
+        embed.add_field(name="Artist", value=artist)
+
+        self.ctx.voice_client.play(discord.FFmpegPCMAudio(song), after=lambda e: self.play_next())
+        self.ctx.voice_client.source.volume = 0.5
+        self.is_playing = True
+
+        self.bot.loop.create_task(self.ctx.send(embed=embed))
+
     def play_next(self):
-        if len(self.song_queue) > 0:
-            self.voice.play(discord.FFmpegPCMAudio(self.song_queue[0]['url'], **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
-            self.song_queue.pop(0)
-        else:
-            self.voice = None
-
-    @commands.command()
-    async def play(self, ctx, url):
-        if not ctx.author.voice:
-            await ctx.send("You are not connected to a voice channel")
-            return
-
-        if self.voice is not None:
-            await ctx.send("I am already playing a song")
-            return
-
-        self.voice = await ctx.author.voice.channel.connect()
-        with youtube_dl.YoutubeDL(self.YDL_OPTIONS) as ydl:
-            info = ydl.extract_info(url, download=False)
-        url2 = info['formats'][0]['url']
-        self.song_queue.append({'url': url2, 'title': info['title']})
-
-        if len(self.song_queue) == 1:
-            self.play_next()
-
-    @commands.command()
-    async def skip(self, ctx):
-        if self.voice is not None and self.voice.is_playing():
-            self.voice.stop()
-        else:
-            await ctx.send("I am not currently playing anything")
-
-    @commands.command()
-    async def pause(self, ctx):
-        if self.voice is not None and self.voice.is_playing():
-            self.voice.pause()
-        else:
-            await ctx.send("I am not currently playing anything")
-
-    @commands.command()
-    async def resume(self, ctx):
-        if self.voice is not None and self.voice.is_paused():
-            self.voice.resume()
-        else:
-            await ctx.send("I am not currently paused")
-
-    @play.before_invoke
-    async def ensure_voice(self, ctx):
-        if self.voice is None:
-            if ctx.author.voice:
-                self.voice = await ctx.author.voice.channel.connect()
+        if self.next_song:
+            self.next_song = False
+            if self.song_queue:
+                self.play_song(self.song_queue.pop(0))
             else:
-                await ctx.send("You are not connected to a voice channel")
-                raise commands.CommandError("Author not connected to a voice channel.")
-        elif self.voice.is_playing():
-            self.voice.stop()
-            
-    def cog_unload(self):
-        if self.voice:
-            self.voice.stop()
-            self.song_queue.clear()
-            asyncio.run_coroutine_threadsafe(self.voice.disconnect(), self.client.loop)
+                self.is_playing = False
+                self.bot.loop.create_task(self.ctx.send("Queue is empty, leaving voice channel."))
+                self.bot.loop.create_task(self.leave_voice_channel())
 
+    def format_duration(self, duration):
+        minutes, seconds = divmod(duration, 60)
+        hours, minutes = divmod(minutes, 60)
+        if hours > 0:
+            return f"{hours:02}:{minutes:02}:{seconds:02}"
+        else:
+            return f"{minutes:02}:{seconds:02}"
+
+    @commands.command()
+    async def play(self, ctx, *args):
+        query = " ".join(args)
+        if "open.spotify.com/track/" not in query:
+            await ctx.send("Invalid query. Please provide a valid Spotify track URL.")
+            return
+        self.ctx = ctx
+
+        if not ctx.author.voice:
+            await ctx.send("You are not connected to a voice channel.")
+
+   
 async def setup(client):
     await client.add_cog(Music(client))
+
+
+
+
+
 

@@ -1,5 +1,4 @@
 config.py
 how to save.txt
 team_data.csv
-users.json
-welcome.json
+.cache
