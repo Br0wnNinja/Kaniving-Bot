@@ -1,10 +1,12 @@
 import discord
 from discord.ext import commands
-import csv
+import sqlite3
 
 class TeamManagement(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.conn = sqlite3.connect("team_data.db")
+        self.c = self.conn.cursor()
         
     @commands.Cog.listener()
     async def on_ready(self):
@@ -52,16 +54,55 @@ class TeamManagement(commands.Cog):
             confirmation_message = f"Created team {team_name} with members {member_mentions}. Team Captain role given to {team_captain_mention}. By {user_mention.mention}!"
             await ctx.send(confirmation_message)
             
-            #Write to CSV file
-            with open("team_data.csv", "a", newline="") as f:
-                writer = csv.writer(f)
-                writer.writerow([team_name, team_members_name_str, team_captain_name, user_name])
+            # Write to SQLite database
+            self.c.execute("INSERT INTO teams VALUES (?, ?, ?, ?)", (team_name, team_members_name_str, team_captain_name, user_name))
+            self.conn.commit()
             
         else:
             await ctx.send("Error: 'Team Captains' role not found.")
             
+    @commands.command()
+    async def list(self, ctx):
+        """List all teams in the database"""
+        self.c.execute("SELECT * FROM teams")
+        teams = self.c.fetchall()
+        if len(teams) == 0:
+            await ctx.send("There are no teams in the database.")
+        else:
+            team_list = "List of teams:\n"
+            for team in teams:
+                team_list += f"{team[0]}: {team[1]} (Team Captain: {team[2]}) - Created by: {team[3]}\n"
+            await ctx.send(team_list)
             
-        
+                
+    @commands.command()
+    @commands.has_role("Staff Team")
+    async def deletefrom(self, ctx, *, team_name_members: str):
+        """Delete a team with the specified name and remove the role from all members"""
+        # Separate the team name from the mentioned teammates using a dash
+        team_name, _ = team_name_members.split("-")
+        role_name = team_name.replace(" ", " ")
+        role = discord.utils.get(ctx.guild.roles, name=role_name)
+
+        # Remove the role from all members
+        if role is not None:
+            for member in ctx.guild.members:
+                if role in member.roles:
+                    await member.remove_roles(role)
+            await role.delete()
+
+            # Delete the team from the database
+            self.c.execute("DELETE FROM teams WHERE team_name=?", (team_name,))
+            self.conn.commit()
+
+            await ctx.send(f"Deleted team {team_name}.")
+        else:
+            await ctx.send(f"Error: Could not find a role named '{role_name}'.")
+
+
+
+           
 async def setup(client):
     await client.add_cog(TeamManagement(client))
+
 
