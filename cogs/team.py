@@ -1,12 +1,20 @@
 import discord
 from discord.ext import commands
 import sqlite3
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import asyncio
 
 class TeamManagement(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.conn = sqlite3.connect("team_data.db")
         self.c = self.conn.cursor()
+        
+        scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+        credentials = ServiceAccountCredentials.from_json_keyfile_name("creds.json", scope)
+        self.client = gspread.authorize(credentials)
+        self.sheet = self.client.open_by_key("1YXRxQyqH_FSCVCquI7rIOyOW1eIdYlf0nwL8c29odhw").sheet1  # Replace with your Google Spreadsheet name
         
     @commands.Cog.listener()
     async def on_ready(self):
@@ -51,12 +59,17 @@ class TeamManagement(commands.Cog):
             member_mentions = " ".join(member.mention for member in team_members if member != ctx.author)
             team_captain = next((member for member in team_members if member != ctx.author), None)
             team_captain_mention = team_captain.mention if team_captain else "None"
+            team_captain_real_name = team_captain.name if team_captain else "None"
             confirmation_message = f"Created team {team_name} with members {member_mentions}. Team Captain role given to {team_captain_mention}. By {user_mention.mention}!"
             await ctx.send(confirmation_message)
             
             # Write to SQLite database
             self.c.execute("INSERT INTO teams VALUES (?, ?, ?, ?)", (team_name, team_members_name_str, team_captain_name, user_name))
             self.conn.commit()
+            
+            
+            row = [team_name, team_captain_real_name]
+            self.sheet.append_row(row, value_input_option='RAW', insert_data_option='INSERT_ROWS', table_range='A1:B1')
             
         else:
             await ctx.send("Error: 'Team Captains' role not found.")
@@ -99,10 +112,19 @@ class TeamManagement(commands.Cog):
         else:
             await ctx.send(f"Error: Could not find a role named '{role_name}'.")
 
+    
+    @commands.command()
+    @commands.has_role("Staff Team")
+    async def deleteall(self, ctx):
+        """Deletes all data from the team_data.db SQLite database"""
+
+        self.c.execute("DELETE FROM teams")
+        self.conn.commit()
+        await ctx.send("All data has been deleted from the database.")
+
+
 
 
            
 async def setup(client):
     await client.add_cog(TeamManagement(client))
-
-
