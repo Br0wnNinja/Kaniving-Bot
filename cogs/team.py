@@ -68,7 +68,7 @@ class TeamManagement(commands.Cog):
             self.conn.commit()
             
             
-            row = [team_name, team_captain_real_name]
+            row = [team_name, team_captain_real_name, team_members_name_str]
             self.sheet.append_row(row, value_input_option='RAW', insert_data_option='INSERT_ROWS', table_range='A1:B1')
             
         else:
@@ -112,7 +112,6 @@ class TeamManagement(commands.Cog):
         else:
             await ctx.send(f"Error: Could not find a role named '{role_name}'.")
 
-    
     @commands.command()
     @commands.has_role("Staff Team")
     async def deleteall(self, ctx):
@@ -121,9 +120,10 @@ class TeamManagement(commands.Cog):
         self.c.execute("DELETE FROM teams")
         self.conn.commit()
         await ctx.send("All data has been deleted from the database.")
-
-
-
+    
+    
+    
+        
 
            
 async def setup(client):
