@@ -121,6 +121,80 @@ class TeamManagement(commands.Cog):
         self.conn.commit()
         await ctx.send("All data has been deleted from the database.")
     
+    @commands.command()
+    @commands.has_role("Staff Team")
+    async def deluser(self, ctx, *, team_name_members: str):
+        """Deletes user from database and removes their team role"""
+
+        team_name, user_mention = team_name_members.split("-")
+        role_name = team_name.replace(" ", " ")
+        role = discord.utils.get(ctx.guild.roles, name=role_name)
+
+        if role is not None:
+            user_id = int(user_mention[3:-1])
+            user = ctx.guild.get_member(user_id)
+            if user is not None:
+                await user.remove_roles(role)
+
+                self.c.execute("SELECT team_members FROM teams WHERE team_name=?", (team_name,))
+                team_members = self.c.fetchone()[0]
+                team_members = team_members.split(", ")
+                if user_mention in team_members:
+                    team_members.remove(user_mention)
+                new_team_members = ", ".join(team_members)
+                self.c.execute("UPDATE teams SET team_members=? WHERE team_name=?", (new_team_members, team_name,))
+                self.conn.commit()
+
+                await ctx.send(f"Successfully removed {user.mention} from {team_name} team.")
+            else:
+                await ctx.send("Could not find the specified user in this server.")
+        else:
+            await ctx.send("Could not find the specified team role.")
+    
+    @commands.command()
+    @commands.has_role("Staff Team")
+    async def adduser(self, ctx, *, team_name_members: str):
+        """Adds user to team in database, and gives them team role"""
+
+        team_name, user_mention = team_name_members.split("-")
+        role_name = team_name.replace(" ", " ")
+        role = discord.utils.get(ctx.guild.roles, name=role_name)
+
+        if role is not None:
+            user_id = int(user_mention[3:-1])
+            user = ctx.guild.get_member(user_id)
+            if user is not None:
+                await user.add_roles(role)
+
+                self.c.execute("SELECT team_members FROM teams WHERE team_name=?", (team_name,))
+                team_members = self.c.fetchone()[0]
+                team_members = team_members.split(", ")
+
+                if user.name not in team_members:
+                    team_members.append(user.name)
+
+                new_team_members = ", ".join(team_members)
+                self.c.execute("UPDATE teams SET team_members=? WHERE team_name=?", (new_team_members, team_name,))
+                self.conn.commit()
+
+                await ctx.send(f"Successfully added {user.name} to {team_name} team.")
+            else:
+                await ctx.send("Could not find the specified user in this server.")
+        else:
+            await ctx.send("Could not find the specified team role.")
+
+
+                
+
+            
+        
+        
+        
+        
+            
+        
+    
+    
     
     
         
