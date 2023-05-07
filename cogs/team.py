@@ -182,23 +182,9 @@ class TeamManagement(commands.Cog):
                 await ctx.send("Could not find the specified user in this server.")
         else:
             await ctx.send("Could not find the specified team role.")
-
-
-                
-
-            
-        
-        
-        
-        
-            
-        
     
     
     
-    
-        
-
-           
+     
 async def setup(client):
     await client.add_cog(TeamManagement(client))
