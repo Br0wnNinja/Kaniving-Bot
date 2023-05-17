@@ -1,7 +1,7 @@
 {
     "643272460770344981": {
-        "Level": 38,
-        "Experience": 17137
+        "Level": 39,
+        "Experience": 17459
     },
     "770725643293818890": {
         "Level": 7,
@@ -9,15 +9,15 @@
     },
     "675557526041001989": {
         "Level": 30,
-        "Experience": 10427
+        "Experience": 10696
     },
     "997667690892251232": {
-        "Level": 14,
-        "Experience": 2271
+        "Level": 15,
+        "Experience": 2569
     },
     "159985870458322944": {
-        "Level": 6,
-        "Experience": 349
+        "Level": 7,
+        "Experience": 438
     },
     "724087943568031816": {
         "Level": 15,
@@ -28,12 +28,12 @@
         "Experience": 56
     },
     "302050872383242240": {
-        "Level": 6,
-        "Experience": 406
+        "Level": 7,
+        "Experience": 470
     },
     "470455996062498826": {
-        "Level": 2,
-        "Experience": 41
+        "Level": 3,
+        "Experience": 51
     },
     "552450977899479040": {
         "Level": 2,
@@ -44,8 +44,8 @@
         "Experience": 9
     },
     "855347402772709416": {
-        "Level": 3,
-        "Experience": 73
+        "Level": 4,
+        "Experience": 134
     },
     "716081910517858314": {
         "Level": 2,
@@ -92,12 +92,12 @@
         "Experience": 186
     },
     "342056876894322688": {
-        "Level": 2,
-        "Experience": 40
+        "Level": 3,
+        "Experience": 52
     },
     "427176950830858250": {
         "Level": 4,
-        "Experience": 160
+        "Experience": 175
     },
     "561709478664208397": {
         "Level": 4,
@@ -109,7 +109,7 @@
     },
     "557628352828014614": {
         "Level": 4,
-        "Experience": 111
+        "Experience": 168
     },
     "508391840525975553": {
         "Level": 2,
@@ -145,10 +145,26 @@
     },
     "339049248039370763": {
         "Level": 3,
-        "Experience": 74
+        "Experience": 86
     },
     "99622200180482048": {
         "Level": 3,
         "Experience": 65
+    },
+    "142786526701420544": {
+        "Level": 3,
+        "Experience": 91
+    },
+    "881241698963959838": {
+        "Level": 2,
+        "Experience": 15
+    },
+    "294641895240630272": {
+        "Level": 2,
+        "Experience": 12
+    },
+    "847678577167433730": {
+        "Level": 2,
+        "Experience": 13
     }
 }

@@ -6,7 +6,6 @@ import os
 import asyncio
 import json
 import tracemalloc
-import youtube_dl
 from config import TOKEN
 import csv
 import spotipy

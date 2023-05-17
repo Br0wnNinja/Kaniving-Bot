@@ -7,7 +7,7 @@ class time(commands.Cog):
     
     @commands.Cog.listener()
     async def on_ready(self):
-        print("userinfo.py is ready!")
+        print("time.py is ready!")
     
     @commands.command()
     async def timezone(self, ctx):
