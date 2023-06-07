@@ -126,7 +126,7 @@ async def on_message(message):
     support_msg_sent = False
     while not support_msg_sent:
         if message.author.id in user_asked_count and user_asked_count[message.author.id] == 1:
-            support_msg = await message.channel.send("Do you need support?")
+            support_msg = await message.channel.send("Do you need support? (React with a thumbs up or thumbs down)")
             await support_msg.add_reaction(thumbs_up)
             await support_msg.add_reaction(thumbs_down)
             user_asked_count[message.author.id] += 1

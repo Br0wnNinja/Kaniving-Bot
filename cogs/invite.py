@@ -11,25 +11,21 @@ class Invite(commands.Cog):
         
     @commands.Cog.listener()
     async def on_member_join(self, member):
+        channel_id = 1082531343747010560
+        channel = self.client.get_channel(channel_id)
+        await channel.send(f"Member joined: {member}")
+        print("Member joined:", member)
         guild = member.guild
-        invites = await guild.invites()
+        invites_before = await guild.invites()
+        await member.guild.chunk()
+        invites_after = await guild.invites()
         
-        for invite in invites:
-            if invite.inviter and invite.uses > 0:
+        for invite in invites_after:
+            if invite.uses > 0 and invite not in invites_before:
                 inviter = invite.inviter
                 invite_code = invite.code
-                
-            if invite.max_uses == 0:
-                uses = "Unlimited"
-            else:
-                uses = invite.uses
-                
-                channel_id = 1082531343747010560
-                channel = self.client.get_channel(channel_id)
-                
-                await channel.send(f"User {str(member)} joined from invite by {inviter.name}")
-                await channel.send(f"Invite Code: {invite_code}")
-                await channel.send(f"Invite Uses: {uses}")   
-    
+                invite_link = f"https://discord.gg/{invite_code}"
+                await channel.send(f"Link Used: {invite_link}")
+
 async def setup(client):
     await client.add_cog(Invite(client))
