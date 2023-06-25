@@ -11,7 +11,7 @@ class Rules(commands.Cog):
 
     @commands.command()
     async def rules(self, ctx):
-        await ctx.send("https://docs.google.com/document/d/1C9wtkcws-csk4eRtAeWH54OxgIjIhQGj4DGpTKSR0qQ/edit?usp=sharing")
+        await ctx.send("https://docs.google.com/document/d/1g73Z1PrUKOBuKFOKtXkpfAffg9HxDnBp7IXu6NreGCE/edit?usp=sharing")
 
 async def setup(client):
     await client.add_cog(Rules(client))
