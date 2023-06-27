@@ -11,6 +11,7 @@ class Rules(commands.Cog):
 
     @commands.command()
     async def rules(self, ctx):
+        await ctx.send("Here are the rules for the current tournament/league:")
         await ctx.send("https://docs.google.com/document/d/1g73Z1PrUKOBuKFOKtXkpfAffg9HxDnBp7IXu6NreGCE/edit?usp=sharing")
 
 async def setup(client):

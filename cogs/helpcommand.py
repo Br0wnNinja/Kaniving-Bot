@@ -21,6 +21,8 @@ class help(commands.Cog):
         help_embed.add_field(name="$""ban", value="Bans a user from a server", inline=False)
         help_embed.add_field(name="$""unban", value="Unbans a user from a server", inline=False)
         help_embed.add_field(name="$""level", value="Checks the level of the desired user in the server", inline=False)
+        help_embed.add_field(name="$""standings", value="Returns the document displaying the current standings for the league", inline=False)
+        help_embed.add_field(name="$""rules", value="Returns the most current rules document for the current tournament/league", inline=False)
         help_embed.add_field(name="$user", value="Returns information about the desired user", inline=False)
         help_embed.add_field(name="Need Help?", value="Feel free to ping/message any of the mods", inline=False)
         

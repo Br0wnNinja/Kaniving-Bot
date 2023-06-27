@@ -1,23 +1,23 @@
 {
     "643272460770344981": {
         "Level": 45,
-        "Experience": 23588
+        "Experience": 24045
     },
     "770725643293818890": {
         "Level": 8,
         "Experience": 817
     },
     "675557526041001989": {
-        "Level": 38,
-        "Experience": 16514
+        "Level": 39,
+        "Experience": 17531
     },
     "997667690892251232": {
         "Level": 26,
-        "Experience": 7634
+        "Experience": 8046
     },
     "159985870458322944": {
         "Level": 15,
-        "Experience": 2403
+        "Experience": 2524
     },
     "724087943568031816": {
         "Level": 15,
@@ -29,7 +29,7 @@
     },
     "302050872383242240": {
         "Level": 11,
-        "Experience": 1273
+        "Experience": 1322
     },
     "470455996062498826": {
         "Level": 4,
@@ -60,8 +60,8 @@
         "Experience": 97
     },
     "975911625477459968": {
-        "Level": 7,
-        "Experience": 586
+        "Level": 9,
+        "Experience": 783
     },
     "783064410410582067": {
         "Level": 17,
@@ -108,8 +108,8 @@
         "Experience": 40
     },
     "557628352828014614": {
-        "Level": 10,
-        "Experience": 1178
+        "Level": 11,
+        "Experience": 1353
     },
     "508391840525975553": {
         "Level": 2,
@@ -152,20 +152,20 @@
         "Experience": 782
     },
     "142786526701420544": {
-        "Level": 4,
-        "Experience": 186
+        "Level": 5,
+        "Experience": 198
     },
     "881241698963959838": {
         "Level": 2,
         "Experience": 15
     },
     "294641895240630272": {
-        "Level": 2,
-        "Experience": 12
+        "Level": 3,
+        "Experience": 52
     },
     "847678577167433730": {
-        "Level": 5,
-        "Experience": 250
+        "Level": 8,
+        "Experience": 747
     },
     "524312875326504972": {
         "Level": 2,
@@ -244,8 +244,8 @@
         "Experience": 26
     },
     "768860804333961216": {
-        "Level": 10,
-        "Experience": 1149
+        "Level": 11,
+        "Experience": 1318
     },
     "859212868959207424": {
         "Level": 2,
@@ -289,7 +289,7 @@
     },
     "618559831518871562": {
         "Level": 5,
-        "Experience": 265
+        "Experience": 279
     },
     "530123015992770560": {
         "Level": 2,
@@ -325,7 +325,7 @@
     },
     "147099798464364545": {
         "Level": 3,
-        "Experience": 80
+        "Experience": 95
     },
     "216305893741035531": {
         "Level": 2,
@@ -416,8 +416,8 @@
         "Experience": 11
     },
     "426577449695051786": {
-        "Level": 2,
-        "Experience": 27
+        "Level": 3,
+        "Experience": 51
     },
     "390703063079583746": {
         "Level": 2,
@@ -445,6 +445,30 @@
     },
     "1016886915309523074": {
         "Level": 3,
-        "Experience": 53
+        "Experience": 93
+    },
+    "464981577861038080": {
+        "Level": 7,
+        "Experience": 460
+    },
+    "175051020311855104": {
+        "Level": 3,
+        "Experience": 66
+    },
+    "226700098099216384": {
+        "Level": 2,
+        "Experience": 31
+    },
+    "289583621294260225": {
+        "Level": 2,
+        "Experience": 13
+    },
+    "300287117698007042": {
+        "Level": 3,
+        "Experience": 86
+    },
+    "755267739236696195": {
+        "Level": 2,
+        "Experience": 15
     }
 }
