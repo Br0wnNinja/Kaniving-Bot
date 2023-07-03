@@ -78,7 +78,7 @@ class LevelSystem(commands.Cog):
         level_card.add_field(name="Experience:", value=self.users[str(user.id)]["Experience"])
         level_card.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar)
         
-        ctx = self.client.get_channel(1082531343747010560)
+        
         await ctx.send(embed=level_card)
         
     
