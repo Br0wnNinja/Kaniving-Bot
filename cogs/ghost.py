@@ -14,7 +14,16 @@ class Ghost(commands.Cog):
         if message.mentions:
             for mention in message.mentions:
                 channel = message.channel
-                await channel.send(f"{message.author.mention}, uh oh, I wouldn't ghost ping again if I were you :)")
+                emoji = discord.utils.get(message.guild.emojis, name="Nerd")
+                bot_id = 1058305655343169666
+                if mention.bot:
+                    return
+                if message.author.id == bot_id:
+                    return
+                if emoji:
+                    await channel.send(f"{message.author.mention}, uh oh, I wouldn't ghost ping again if I were you {emoji}")
+                else:
+                    await channel.send(f"{message.author.mention}, uh oh, I wouldn't ghost ping again if I were you :)")
 
 async def setup(client):
     await client.add_cog(Ghost(client))
